@@ -33,13 +33,13 @@ namespace LibraryManagementSystem {
     {
         public int studentId;
         public int courseId;
-        public DateTime enrollmentDate;
+        public DateTime EnrollmentDate;
         
         public void Display2()
         {
             Console.WriteLine( "Id: " + " " + studentId);
             Console.WriteLine("CourseId:" + " " + courseId);
-            Console.WriteLine("Enroll Date:" + " " + enrollmentDate.ToString("yyyy-MM-dd"));
+            Console.WriteLine("Enroll Date:" + " " + EnrollmentDate.ToString("yyyy-MM-dd"));
             Console.WriteLine();
         }
     }
@@ -48,11 +48,11 @@ namespace LibraryManagementSystem {
     {
         static List <Courses> courses = new List <Courses> () 
         {
-          new Courses { Id = 501, Title = "Tribology", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore." },
-          new Courses { Id = 509, Title = "Thermodynamics", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."}, 
-          new Courses { Id = 505, Title = "Fluid Mechanics", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."}, 
-          new Courses { Id = 504, Title = "Heat Engines", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore." },
-          new Courses { Id = 508, Title = "Transmission", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."} 
+          new Courses { Id = 501, Title = "Tribology", Description = "Study of friction, wear, and lubrication in machines." },
+          new Courses { Id = 509, Title= "Thermodynamics" , Description = "Principles governing energy, heat, and work."}, 
+          new Courses { Id = 505, Title="Fluid Mechanics", Description = "Behavior of liquids and gases in motion and at rest."}, 
+          new Courses { Id = 504, Title = "Heat Engines", Description = "Design and operation of engines converting heat to work." },
+          new Courses { Id = 508, Title = "Transmission", Description = "Mechanisms for power transfer in machines and vehicle."} 
         };
         
         static List <Students> students = new List <Students>()
@@ -72,7 +72,6 @@ namespace LibraryManagementSystem {
           new Enrollments { studentId = 301, courseId = 504, EnrollmentDate = new DateTime(2025, 12, 25)},
           new Enrollments { studentId = 101, courseId = 505, EnrollmentDate = new DateTime(2025, 12, 27)}
         };
-    }
     
     static void viewCourse ()
     {
@@ -123,7 +122,6 @@ namespace LibraryManagementSystem {
        if (studentEnrollments.Count == 0)
        {
            Console.WriteLine("You are not enrolled in any courses.");
-           enroll();
            return;
        }
        Console.WriteLine("Your enrolled courses are:");
@@ -137,8 +135,12 @@ namespace LibraryManagementSystem {
        }
     }
     
-    static void Login()
+    static bool Login()
     {
+        Console.WriteLine ("Welcome to the Learning Management System.");
+        Console.WriteLine("Press any key to get started");
+        Console.ReadKey();
+        Console.WriteLine();
         Console.WriteLine("Are you a registered user? (yes/no)");
         string user = Console.ReadLine().Trim().ToLower();
         if (user== "yes")
@@ -149,7 +151,7 @@ namespace LibraryManagementSystem {
           if (storedUserNames != null)
           {
               Console.WriteLine("Welcome Back, " + " " + userN + "!" );
-              return;
+              return true;
           }
           else
           {
@@ -168,6 +170,7 @@ namespace LibraryManagementSystem {
       
               students.Add(newStudent);
               Console.WriteLine("Registration Successful!");
+              return false;
           }
         }
         else
@@ -187,7 +190,7 @@ namespace LibraryManagementSystem {
             students.Add(newStudent);
             Console.WriteLine("Registration Successful!");
             Console.WriteLine();
-            return;
+            return false;
 
         }
     }
@@ -195,18 +198,24 @@ namespace LibraryManagementSystem {
     
     static void Main(string[] args)
     {
+        bool loggedIn = false;
+        while (!loggedIn)
+        {
+            loggedIn = Login();
+        }
+        
         bool exit = false;
         while (!exit)
         {
-            Console.WriteLine ("Welcome to the Library Management System.");
-            Console.WriteLine("Press any key to get started");
-            Console.ReadKey();
-            Login();
-            
+            Console.WriteLine();
             Console.WriteLine("...Main Menu...");
+            System.Threading.Thread.Sleep(1000);
             Console.WriteLine("1) View Courses");
+            System.Threading.Thread.Sleep(500);
             Console.WriteLine("2) Enroll in a Course");
+            System.Threading.Thread.Sleep(500);
             Console.WriteLine("3) View my Courses");
+            System.Threading.Thread.Sleep(500);
             Console.WriteLine("4) Exit");
             Console.WriteLine("select an option");
             string choice = Console.ReadLine();
@@ -229,10 +238,10 @@ namespace LibraryManagementSystem {
             {
                 exit = true;
                 System.Threading.Thread.Sleep(1000);
-                Console.WriteLine("Exiting system....");
+                Console.WriteLine("Exiting system....Bye!!");
             }
         }
     }
 
-    
+ }  
 }
