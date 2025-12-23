@@ -1,0 +1,238 @@
+using System;
+using System.Collections.Generic;
+
+namespace LibraryManagementSystem {
+    class Courses
+    {
+        public int Id;
+        public string Title;
+        public string Description;
+        
+        public void Display()
+        {
+            Console.WriteLine(Id + "-" + Title);
+            Console.WriteLine("Description:" + " " + Description);
+            Console.WriteLine();
+        }
+    }
+    
+    class Students
+    {
+        public int studentId;
+        public string userName;
+        
+        public void Display1 ()
+        {
+            Console.WriteLine( "Id: " + " " + studentId);
+            Console.WriteLine("userName:" + " " + userName);
+            Console.WriteLine();
+        }
+    }
+    
+    class Enrollments
+    {
+        public int studentId;
+        public int courseId;
+        public DateTime enrollmentDate;
+        
+        public void Display2()
+        {
+            Console.WriteLine( "Id: " + " " + studentId);
+            Console.WriteLine("CourseId:" + " " + courseId);
+            Console.WriteLine("Enroll Date:" + " " + enrollmentDate.ToString("yyyy-MM-dd"));
+            Console.WriteLine();
+        }
+    }
+    
+    class Program
+    {
+        static List <Courses> courses = new List <Courses> () 
+        {
+          new Courses { Id = 501, Title = "Tribology", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore." },
+          new Courses { Id = 509, Title = "Thermodynamics", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."}, 
+          new Courses { Id = 505, Title = "Fluid Mechanics", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."}, 
+          new Courses { Id = 504, Title = "Heat Engines", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore." },
+          new Courses { Id = 508, Title = "Transmission", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."} 
+        };
+        
+        static List <Students> students = new List <Students>()
+        {
+          new Students { studentId = 101, userName = "Morola24"}, 
+          new Students { studentId = 105, userName = "Tomiwa36"}, 
+          new Students { studentId = 201, userName = "Funmilade77"},
+          new Students { studentId = 301, userName = "Tosin88"},
+          new Students { studentId = 101, userName = "Bolade33"}
+        };
+        
+        static List <Enrollments> enrollments = new List <Enrollments> ()
+        {
+          new Enrollments { studentId = 101, courseId = 501, EnrollmentDate = new DateTime(2025, 12, 20)}, 
+          new Enrollments { studentId = 105, courseId = 509, EnrollmentDate = new DateTime(2025, 12, 21)}, 
+          new Enrollments { studentId = 201, courseId = 508, EnrollmentDate = new DateTime(2025, 12, 23)},
+          new Enrollments { studentId = 301, courseId = 504, EnrollmentDate = new DateTime(2025, 12, 25)},
+          new Enrollments { studentId = 101, courseId = 505, EnrollmentDate = new DateTime(2025, 12, 27)}
+        };
+    }
+    
+    static void viewCourse ()
+    {
+        foreach (Courses c in courses)
+        {
+           c.Display(); 
+        }
+    }
+    
+    static void enroll()
+    {
+        Console.WriteLine("Kindly enter your Student ID:");
+        int studentId =  Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Kindly enter the Course ID of the course you wish to register for.");
+        int chosenCourse =  Convert.ToInt32(Console.ReadLine());
+        
+        Courses course = courses.Find(c => c.Id == chosenCourse);
+        if (course == null)
+        {
+           Console.WriteLine("Course Id not found. Enrollment Failed!");
+           return;
+        }
+        bool alreadyEnrolled = enrollments.Exists(e=> e.studentId == studentId && e.courseId == chosenCourse);
+        if (alreadyEnrolled)
+        {
+          Console.WriteLine("You are already enrolled in this course.");
+          return;
+        }
+        Enrollments newEnrollment = new Enrollments
+        {
+          studentId = studentId,
+          courseId = chosenCourse,
+          EnrollmentDate = DateTime.Now
+        };
+      
+        enrollments.Add(newEnrollment);
+        Console.WriteLine("Enrollment Successful!");
+      
+    }
+    
+    
+    static void myCourses()
+    {
+         Console.WriteLine("Kindly enter your Student ID:");
+       int studentId =  Convert.ToInt32(Console.ReadLine());
+       var studentEnrollments = enrollments.FindAll(e=> e.studentId == studentId);
+       
+       if (studentEnrollments.Count == 0)
+       {
+           Console.WriteLine("You are not enrolled in any courses.");
+           enroll();
+           return;
+       }
+       Console.WriteLine("Your enrolled courses are:");
+       foreach (var enrollment in studentEnrollments)
+       {
+           Courses course = courses.Find(c=> c.Id == enrollment.courseId);
+           if (course != null)
+           {
+               course.Display();
+           }
+       }
+    }
+    
+    static void Login()
+    {
+        Console.WriteLine("Are you a registered user? (yes/no)");
+        string user = Console.ReadLine().Trim().ToLower();
+        if (user== "yes")
+        {
+          Console.WriteLine("What is your username?");
+          string userN = Console.ReadLine();
+          var storedUserNames = students.Find(f => f.userName == userN);
+          if (storedUserNames != null)
+          {
+              Console.WriteLine("Welcome Back, " + " " + userN + "!" );
+              return;
+          }
+          else
+          {
+              Console.WriteLine("User not found");
+              Console.WriteLine("Please register!!");
+              Console.WriteLine(".........Registration Section.........");
+              Console.WriteLine("Please enter a username(must be your firstname and last two digits of your birth year).");
+              string detailsName = Console.ReadLine();
+              Console.WriteLine("Please enter your studentID");
+              int detailsId = Convert.ToInt32(Console.ReadLine());
+              Students newStudent = new Students
+              {
+                   studentId = detailsId,
+                   userName = detailsName
+              };
+      
+              students.Add(newStudent);
+              Console.WriteLine("Registration Successful!");
+          }
+        }
+        else
+        {
+            Console.WriteLine(".........Registration Section.........");
+            System.Threading.Thread.Sleep(1000);
+            Console.WriteLine("Please enter a username(must be your firstname and last two digits of your birth year).");
+            string detailsName = Console.ReadLine();
+            Console.WriteLine("Please enter your studentID");
+            int detailsId = Convert.ToInt32(Console.ReadLine());
+            Students newStudent = new Students
+            {
+               studentId = detailsId,
+               userName = detailsName,
+            };
+      
+            students.Add(newStudent);
+            Console.WriteLine("Registration Successful!");
+            Console.WriteLine();
+            return;
+
+        }
+    }
+    
+    
+    static void Main(string[] args)
+    {
+        bool exit = false;
+        while (!exit)
+        {
+            Console.WriteLine ("Welcome to the Library Management System.");
+            Console.WriteLine("Press any key to get started");
+            Console.ReadKey();
+            Login();
+            
+            Console.WriteLine("...Main Menu...");
+            Console.WriteLine("1) View Courses");
+            Console.WriteLine("2) Enroll in a Course");
+            Console.WriteLine("3) View my Courses");
+            Console.WriteLine("4) Exit");
+            Console.WriteLine("select an option");
+            string choice = Console.ReadLine();
+            
+            if (choice == "1")
+            {
+                viewCourse ();
+            }
+            
+            if (choice == "2")
+            {
+               enroll();
+            }
+            
+            if (choice == "3")
+            {
+                myCourses();
+            }
+            if (choice == "4")
+            {
+                exit = true;
+                System.Threading.Thread.Sleep(1000);
+                Console.WriteLine("Exiting system....");
+            }
+        }
+    }
+
+    
+}
